@@ -22,5 +22,5 @@ jobs:
           cache: maven
       - name: Build with Maven
         run: | 
-          echo "mvn clean compile install -DskipTests"
+          echo "./mvnw clean compile install -DskipTests"
           mvn clean compile install -DskipTests
