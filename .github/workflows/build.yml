@@ -1,7 +1,8 @@
 name: Java Maven Build
-run-name: ${{ github.actor }} is building Java Maven Project 🚀
+run-name: ${{ github.repository_owner }} is building Java Maven Project 🚀
 on:
   - push
+  - pull_request
 
 
 jobs:
@@ -10,10 +11,8 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Repo Checkout
-#        run: echo "Checking out repo from ${{ github.repository }} with actions/checkout@v3"
         uses: actions/checkout@v3
       - name: Set up JDK 17
-#        run: echo "Setting up JDK 17 with actions/setup-java@v3"
         uses: actions/setup-java@v3
         with:
           java-version: '17'
@@ -24,3 +23,15 @@ jobs:
         run: | 
           echo "./mvnw clean compile install -DskipTests"
           ./mvnw clean compile install -DskipTests
+  
+  
+
+  list-files:
+    needs: build
+    runs-on: self-hosted
+    steps:
+      - name: List files
+        run: |
+          ls target/
+
+  
