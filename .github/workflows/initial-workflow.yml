@@ -22,18 +22,21 @@ jobs:
     needs: Explore-GitHub-Actions
     runs-on: self-hosted
     steps:
-      - uses: awalsh128/cache-apt-pkgs-action@latest
-        with:
-          packages: tree
+#      - uses: awalsh128/cache-apt-pkgs-action@latest
+#        with:
+#          packages: tree
+#      - name: List files
+#        run: |
+#          tree -L 3
+
+#
+      - name: install package 'tree' on runner
+        run: | 
+          id -a
+          sudo apt-get install tree -y
+          which tree
       - name: List files
         run: |
           tree -L 3
-
-
-      - name: install package tree on runner
-        run: sudo apt install tree
-      - name: List files
-        run: |
-          tree -L 3
-          
+#
 

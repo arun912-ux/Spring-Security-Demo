@@ -19,7 +19,7 @@ jobs:
           distribution: 'temurin'
           architecture: x64
           cache: maven
-      - name: Build with Maven
+      - name: Build with Maven Wrapper
         run: | 
           echo "./mvnw clean compile install -DskipTests"
           ./mvnw clean compile install -DskipTests
@@ -33,5 +33,9 @@ jobs:
       - name: List files
         run: |
           ls target/
+
+      - name : tree view
+        run: |
+          tree -L 3
 
   
