@@ -21,11 +21,11 @@ jobs:
           cache: maven
       - name: Build with Maven Wrapper
         run: | 
-          echo "./mvnw clean compile install -DskipTests"
-          ./mvnw clean compile install -DskipTests
+          echo "./gradlew clean build"
+          ./gradlew clean build -x test
           pwd
           ls
-          ls target/
+          ls build/libs
   
   
 
@@ -35,7 +35,7 @@ jobs:
     steps:
       - name: List files
         run: |
-          ls target/
+          ls build/libs
 
       - name : tree view
         run: |
