@@ -23,6 +23,9 @@ jobs:
         run: | 
           echo "./mvnw clean compile install -DskipTests"
           ./mvnw clean compile install -DskipTests
+          pwd
+          ls
+          ls target/
   
   
 
