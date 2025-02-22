@@ -1,0 +1,64 @@
+
+
+spring:
+
+  datasource:
+    url: jdbc:mariadb://172.17.0.1:3306/spring_security
+    username: root
+    password: root123
+    driver-class-name: org.mariadb.jdbc.Driver
+
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    generate-ddl: true
+
+
+
+  security:
+    oauth2:
+      client:
+        registration:
+          authentik:
+            client-id: xl3s4c8R99tNOMoBg3LXIhzkXdDHlf1VfvHxXBVb
+            client-secret: jGRZ2pkAyI8b60t9FZKW2HUVdwF32Vltd4yNkU888neL08IORD4ZrOkhOVrc3ksKLpqo2gcdG4DVGJMngUANX8IgabBJFILQOMmSCdFdgg3J7b9W4CMHIIPcafJ8eI60
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+#            authorization-grant-type: authorization_code
+            scope:
+              - preferred_name
+              - email
+              - openid
+              - profile
+            client-name: Authentik
+            provider: authentik
+        provider:
+          authentik:
+            authorization-uri: http://rocky.internal:9000/application/o/authorize/
+            token-uri: http://rocky.internal:9000/application/o/token/
+            user-info-uri: http://rocky.internal:9000/application/o/userinfo/
+            jwk-set-uri: http://rocky.internal:9000/application/o/spring-security-demo/jwks/
+            issuer-uri: http://rocky.internal:9000/application/o/spring-security-demo/
+            user-name-attribute: preferred_username
+
+
+
+
+
+
+
+
+
+
+
+logging:
+  level:
+    org:
+      springframework:
+        security:
+          web:
+            FilterChainProxy: debug

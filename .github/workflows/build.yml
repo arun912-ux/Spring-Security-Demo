@@ -18,7 +18,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           architecture: x64
-          cache: maven
+          cache: gradle
       - name: Build with Maven Wrapper
         run: | 
           echo "./gradlew clean build"

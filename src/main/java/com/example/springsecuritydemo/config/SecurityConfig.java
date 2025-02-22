@@ -5,6 +5,7 @@ import com.example.springsecuritydemo.config.filter.JWTTokenGenerationFilter;
 import com.example.springsecuritydemo.config.filter.JWTTokenValidationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
@@ -31,9 +32,7 @@ import java.util.List;
 
 
 
-@Component
-@EnableWebSecurity
-@EnableMethodSecurity
+@Configuration
 public class SecurityConfig {
 
 
@@ -90,7 +89,7 @@ public class SecurityConfig {
 //                .cors(cors -> cors.disable())
                 .cors(cors -> cors.configurationSource(req -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(List.of("http://localhost:4200", "http://192.168.1.3:4200"));
+                    config.setAllowedOrigins(List.of("http://localhost:4200", "http://192.168.1.23:4200"));
                     config.setAllowedMethods(List.of(HttpMethod.POST.toString()));
                     config.setExposedHeaders(List.of("Authorization"));
                     config.setMaxAge(60L);
@@ -119,13 +118,13 @@ public class SecurityConfig {
                 })
 
 
-//                .formLogin(Customizer.withDefaults())
-                .formLogin(login -> {
+                .formLogin(Customizer.withDefaults())
+//                .formLogin(login -> {
 //                    login.loginProcessingUrl("/login");
 //                    login.defaultSuccessUrl("/home");
 //                    login.loginPage("/login");
-                    login.failureUrl("/login?error");
-                })
+//                    login.failureUrl("/login?error");
+//                })
 
 
                 .logout(logout -> {
@@ -136,10 +135,11 @@ public class SecurityConfig {
 
 
                 .httpBasic(Customizer.withDefaults())
+                .oauth2Login(Customizer.withDefaults())
+
 
 //                .userDetailsService(userDetailsService)
-
-                .rememberMe(rme -> rme.alwaysRemember(false))
+                .rememberMe(rme -> rme.alwaysRemember(true))
 
         ;
 

@@ -23,14 +23,13 @@ public class RootController {
 
 
     /**
-     *
      * This is a default home page
      *
      * @return ResponseEntity<String>
      */
 
     @GetMapping("/")
-    public ResponseEntity<String> rootHome(){
+    public ResponseEntity<String> rootHome() {
         Logger.getLogger(RootController.class.getName()).log(Level.INFO, "inside home");
         return ResponseEntity.ok("Hello World");
     }
@@ -43,44 +42,41 @@ public class RootController {
      */
 
     @PreAuthorize(value = "hasAnyRole('USER', 'ADMIN')")
-    @GetMapping({"admin", "admin/"})
-    public String adminHome(){
+    @GetMapping({"admin"})
+    public String adminHome() {
         log.info("inside admin home");
         return "Hello Admin";
     }
 
-    @GetMapping("/home")
-    @PreAuthorize(value = "hasAnyRole('USER', 'ADMIN')")
-    public String home(){
+    @GetMapping("home")
+//    @PreAuthorize(value = "hasAnyRole('USER', 'ADMIN')")
+    public String home() {
         log.info("inside home");
         return "Hello Home !";
     }
 
 
     /**
-     *
      * This method is to test the Cross-Site Request Forgery (CSRF)
      *
      * @return ResponseEntity<String>
      */
 
     @PostMapping("/post")
-    public ResponseEntity<String> post(){
+    public ResponseEntity<String> post() {
         return ResponseEntity.ok()
                 .cacheControl(CacheControl.maxAge(60, TimeUnit.SECONDS))
                 .body("Hello Post");
     }
 
 
-
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/user")
-    public Object user(Authentication authentication){
+    public Object user(Authentication authentication) {
         log.info("authentication : {}", authentication);
-//        Principal principal = (Principal) authentication.getPrincipal();
+        Principal principal = (Principal) authentication.getPrincipal();
         return authentication;
     }
-
 
 
 }
