@@ -6,15 +6,14 @@ import org.springframework.http.CacheControl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.security.Principal;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @Slf4j
 @RestController
@@ -29,8 +28,12 @@ public class RootController {
      */
 
     @GetMapping("/")
-    public ResponseEntity<String> rootHome() {
-        Logger.getLogger(RootController.class.getName()).log(Level.INFO, "inside home");
+    public ResponseEntity<?> rootHome(Authentication authentication) {
+        log.info("inside rootHome");
+        log.info("inside rootHome : authentication : {}", authentication);
+        if (authentication != null) {
+            return ResponseEntity.ok(authentication);
+        }
         return ResponseEntity.ok("Hello World");
     }
 
@@ -41,7 +44,8 @@ public class RootController {
      * @return String
      */
 
-    @PreAuthorize(value = "hasAnyRole('USER', 'ADMIN')")
+    @PreAuthorize(value = "hasRole('ADMIN')")
+//    @PreAuthorize(value = "hasAnyAuthority('OIDC_USER')")
     @GetMapping({"admin"})
     public String adminHome() {
         log.info("inside admin home");
@@ -70,12 +74,13 @@ public class RootController {
     }
 
 
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    //    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @PreAuthorize(value = "hasAnyAuthority('OIDC_USER') || hasAnyRole('DEFAULT', 'ADMIN')")
     @GetMapping("/user")
-    public Object user(Authentication authentication) {
+    public Object user(@AuthenticationPrincipal OAuth2User oAuth2User, Authentication authentication) {
+        log.info("oAuth2User : {}", oAuth2User);
         log.info("authentication : {}", authentication);
-        Principal principal = (Principal) authentication.getPrincipal();
-        return authentication;
+        return oAuth2User == null ? authentication : oAuth2User;
     }
 
 

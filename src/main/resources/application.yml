@@ -2,6 +2,9 @@
 
 spring:
 
+  profiles:
+    active: ${SPRING_PROFILE_ACTIVE:dev}
+
   datasource:
     url: jdbc:mariadb://172.17.0.1:3306/spring_security
     username: root
@@ -28,7 +31,7 @@ spring:
             client-id: xl3s4c8R99tNOMoBg3LXIhzkXdDHlf1VfvHxXBVb
             client-secret: jGRZ2pkAyI8b60t9FZKW2HUVdwF32Vltd4yNkU888neL08IORD4ZrOkhOVrc3ksKLpqo2gcdG4DVGJMngUANX8IgabBJFILQOMmSCdFdgg3J7b9W4CMHIIPcafJ8eI60
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
-#            authorization-grant-type: authorization_code
+            authorization-grant-type: authorization_code
             scope:
               - preferred_name
               - email
@@ -38,12 +41,24 @@ spring:
             provider: authentik
         provider:
           authentik:
-            authorization-uri: http://rocky.internal:9000/application/o/authorize/
-            token-uri: http://rocky.internal:9000/application/o/token/
-            user-info-uri: http://rocky.internal:9000/application/o/userinfo/
-            jwk-set-uri: http://rocky.internal:9000/application/o/spring-security-demo/jwks/
-            issuer-uri: http://rocky.internal:9000/application/o/spring-security-demo/
+            authorization-uri: http://authentik.proxy.internal/application/o/authorize/
+            token-uri: http://authentik.proxy.internal/application/o/token/
+            user-info-uri: http://authentik.proxy.internal/application/o/userinfo/
+            jwk-set-uri: http://authentik.proxy.internal/application/o/spring-security-demo/jwks/
+            issuer-uri: http://authentik.proxy.internal/application/o/spring-security-demo/
+            user-info-authentication-method: jwt
             user-name-attribute: preferred_username
+
+
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://authentik.proxy.internal/application/o/spring-security-demo/jwks/
+          issuer-uri: http://authentik.proxy.internal/application/o/spring-security-demo/
+          authorities-claim-name: groups
+          authority-prefix: ROLE_
+          jws-algorithms: RS256
+
+
 
 
 
@@ -59,6 +74,7 @@ logging:
   level:
     org:
       springframework:
-        security:
-          web:
-            FilterChainProxy: debug
+        security: trace
+
+
+

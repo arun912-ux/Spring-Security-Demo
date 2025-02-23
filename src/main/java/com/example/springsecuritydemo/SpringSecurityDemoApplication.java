@@ -8,7 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 
 @SpringBootApplication
 @EnableMethodSecurity
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity(debug = false)
 public class SpringSecurityDemoApplication {
 
     public static void main(String[] args) {
