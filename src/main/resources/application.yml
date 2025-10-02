@@ -27,42 +27,37 @@ spring:
     oauth2:
       client:
         registration:
-          authentik:
-            client-id: xl3s4c8R99tNOMoBg3LXIhzkXdDHlf1VfvHxXBVb
-            client-secret: jGRZ2pkAyI8b60t9FZKW2HUVdwF32Vltd4yNkU888neL08IORD4ZrOkhOVrc3ksKLpqo2gcdG4DVGJMngUANX8IgabBJFILQOMmSCdFdgg3J7b9W4CMHIIPcafJ8eI60
+          keycloak:
+            client-id: spring-security
+            client-secret: l2qRWguFSr0d8JtjZlgOIsbArvjHuVR4
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
             authorization-grant-type: authorization_code
             scope:
-              - preferred_name
               - email
               - openid
               - profile
-            client-name: Authentik
-            provider: authentik
+              - roles
+              - address
+            client-name: KeyCloak
+            provider: keycloak
         provider:
-          authentik:
-            authorization-uri: http://authentik.proxy.internal/application/o/authorize/
-            token-uri: http://authentik.proxy.internal/application/o/token/
-            user-info-uri: http://authentik.proxy.internal/application/o/userinfo/
-            jwk-set-uri: http://authentik.proxy.internal/application/o/spring-security-demo/jwks/
-            issuer-uri: http://authentik.proxy.internal/application/o/spring-security-demo/
-            user-info-authentication-method: jwt
-            user-name-attribute: preferred_username
+          keycloak:
+            authorization-uri: https://keycloak.chaco-climb.ts.net/realms/spring-security/protocol/openid-connect/auth
+            token-uri: https://keycloak.chaco-climb.ts.net/realms/spring-security/protocol/openid-connect/token
+#            user-info-uri: https://keycloak.chaco-climb.ts.net/application/o/userinfo/
+            jwk-set-uri: https://keycloak.chaco-climb.ts.net/realms/spring-security/protocol/openid-connect/certs
+            issuer-uri: https://keycloak.chaco-climb.ts.net/realms/spring-security
+#            user-info-authentication-method: jwt
+#            user-name-attribute: preferred_username
 
 
       resourceserver:
         jwt:
-          jwk-set-uri: http://authentik.proxy.internal/application/o/spring-security-demo/jwks/
-          issuer-uri: http://authentik.proxy.internal/application/o/spring-security-demo/
-          authorities-claim-name: groups
-          authority-prefix: ROLE_
-          jws-algorithms: RS256
-
-
-
-
-
-
+          jwk-set-uri: https://keycloak.chaco-climb.ts.net/realms/spring-security/protocol/openid-connect/certs
+          issuer-uri: https://keycloak.chaco-climb.ts.net/realms/spring-security
+#          authorities-claim-name: roles
+#          authority-prefix: ROLE_
+#          jws-algorithms: RS256
 
 
 
@@ -75,6 +70,5 @@ logging:
     org:
       springframework:
         security: trace
-
 
 

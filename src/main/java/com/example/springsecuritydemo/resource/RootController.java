@@ -1,6 +1,8 @@
 package com.example.springsecuritydemo.resource;
 
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.CacheControl;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestClient;
 
 import java.util.concurrent.TimeUnit;
 
@@ -19,6 +22,8 @@ import java.util.concurrent.TimeUnit;
 @RestController
 @RequestMapping("/")
 public class RootController {
+
+    private final RestClient restClient = RestClient.create();
 
 
     /**
@@ -37,6 +42,16 @@ public class RootController {
         return ResponseEntity.ok("Hello World");
     }
 
+    @GetMapping("keycloak-logout")
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
+        log.info("------------------------------------------------------------------");
+        log.info("inside logout");
+        log.info("------------------------------------------------------------------");
+
+        response.setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY);
+        response.setHeader("Location", "https://keycloak.chaco-climb.ts.net/realms/spring-security/protocol/openid-connect/logout/");
+    }
+
 
     /**
      * This method is to test the @PreAuthorize annotation with hasRole
@@ -53,7 +68,7 @@ public class RootController {
     }
 
     @GetMapping("home")
-//    @PreAuthorize(value = "hasAnyRole('USER', 'ADMIN')")
+    @PreAuthorize(value = "hasAnyAuthority('SCOPE_READ')")
     public String home() {
         log.info("inside home");
         return "Hello Home !";
@@ -74,8 +89,7 @@ public class RootController {
     }
 
 
-    //    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    @PreAuthorize(value = "hasAnyAuthority('OIDC_USER') || hasAnyRole('DEFAULT', 'ADMIN')")
+    @PreAuthorize(value = "hasAnyAuthority('OIDC_USER', 'SCOPE_READ', 'SCOPE_WRITE') || hasAnyRole('DEFAULT', 'ADMIN')")
     @GetMapping("/user")
     public Object user(@AuthenticationPrincipal OAuth2User oAuth2User, Authentication authentication) {
         log.info("oAuth2User : {}", oAuth2User);

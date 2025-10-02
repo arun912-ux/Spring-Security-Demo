@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -68,8 +69,8 @@ public class SecurityConfig {
                 )
                 .logout(logout -> logout
                         .clearAuthentication(true)
-                        .deleteCookies("JSESSIONID")
                         .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
                 )
 //                .userDetailsService(oauth2UserService)
         ;
@@ -77,6 +78,16 @@ public class SecurityConfig {
         return http.build();
     }
 
+    @Bean
+    public JwtAuthenticationConverter jwtAuthenticationConverter() {
+//        JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+//        grantedAuthoritiesConverter.setAuthoritiesClaimName("realm_access.roles");
+
+        JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
+//        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
+        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(new CustomJwtRolesConverter());
+        return jwtAuthenticationConverter;
+    }
 
     /**
      * This method is to create the PasswordEncoder bean
@@ -123,5 +134,3 @@ public class SecurityConfig {
 
 
 }
-
-
