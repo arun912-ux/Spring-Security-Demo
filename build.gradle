@@ -60,3 +60,41 @@ publishing {
     }
 }
 
+// integration tests
+sourceSets {
+    integrationTest {
+        java {
+            srcDir 'src/integrationTest/java'
+        }
+        resources {
+            srcDir 'src/integrationTest/resources'
+        }
+        compileClasspath += main.output + test.output
+        runtimeClasspath += main.output + test.output
+    }
+}
+
+// Let integrationTest configuration extend from testImplementation / testRuntimeOnly
+configurations {
+    integrationTestImplementation.extendsFrom(testImplementation)
+    integrationTestRuntimeOnly.extendsFrom(testRuntimeOnly)
+}
+
+tasks.register('integrationTest', Test) {
+    description = 'Runs integration tests.'
+    group = 'verification'
+
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+
+    testLogging {
+        events "failed"     //  "passed", "skipped"
+    }
+    // you may want integration tests to run after unit tests
+    shouldRunAfter test
+
+    // optionally use JUnit Platform (if JUnit 5)
+    useJUnitPlatform()
+}
+
+check.dependsOn integrationTest
