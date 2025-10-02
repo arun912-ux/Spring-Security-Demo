@@ -22,32 +22,18 @@ spring:
 
   security:
     oauth2:
-      client:
-        registration:
-          authentik:
-            client-id: xl3s4c8R99tNOMoBg3LXIhzkXdDHlf1VfvHxXBVb
-            client-secret: jGRZ2pkAyI8b60t9FZKW2HUVdwF32Vltd4yNkU888neL08IORD4ZrOkhOVrc3ksKLpqo2gcdG4DVGJMngUANX8IgabBJFILQOMmSCdFdgg3J7b9W4CMHIIPcafJ8eI60
-            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
-#            authorization-grant-type: authorization_code
-            scope:
-              - preferred_name
-              - email
-              - openid
-              - profile
-            client-name: Authentik
-            provider: authentik
-        provider:
-          authentik:
-            authorization-uri: http://rocky.internal:9000/application/o/authorize/
-            token-uri: http://rocky.internal:9000/application/o/token/
-            user-info-uri: http://rocky.internal:9000/application/o/userinfo/
-            jwk-set-uri: http://rocky.internal:9000/application/o/spring-security-demo/jwks/
-            issuer-uri: http://rocky.internal:9000/application/o/spring-security-demo/
-            user-name-attribute: preferred_username
+      resourceserver:
+        jwt:
+          issuer-uri: ${JWT_ISSUER_URI:https://moweja-dev.eu.auth0.com/}
+          jwk-set-uri: ${JWT_JWKS_URI:https://moweja-dev.eu.auth0.com/.well-known/jwks.json}
 
 
-
-
+# JWT Configuration
+jwt:
+  issuer-uri: ${JWT_ISSUER_URI:https://moweja-dev.eu.auth0.com/}
+  jwks-uri: ${JWT_JWKS_URI:https://moweja-dev.eu.auth0.com/.well-known/jwks.json}
+  audience: ${JWT_AUDIENCE:https://localhost.sh}
+  claims-namespace: ${JWT_CLAIMS_NAMESPACE:permissions}  # Optional: for custom claims namespaces
 
 
 
@@ -62,3 +48,14 @@ logging:
         security:
           web:
             FilterChainProxy: debug
+
+    root: INFO
+    org.springframework.security: DEBUG
+    org.springframework.security.oauth2: DEBUG
+    org.springframework.security.web: DEBUG
+    org.springframework.web.filter.OncePerRequestFilter: DEBUG
+    org.springframework.security.oauth2.jwt: DEBUG
+    org.springframework.security.oauth2.server.resource.authentication: TRACE
+    com.example.springsecuritydemo: DEBUG
+
+
