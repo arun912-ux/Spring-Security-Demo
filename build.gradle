@@ -5,7 +5,7 @@
 plugins {
     id 'java'
     id 'maven-publish'
-    id 'org.springframework.boot' version '3.5.6'
+    id 'org.springframework.boot' version '3.5.7'
     id 'io.spring.dependency-management' version '1.1.7'
 }
 
@@ -35,6 +35,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework:spring-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
     // security
@@ -50,6 +51,7 @@ dependencies {
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+    runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
 }
 
 publishing {
