@@ -43,7 +43,7 @@ public class SecurityConfig {
             "/swagger-ui/**",
             "/v3/api-docs/**",
             "/webjars/**",
-            "/actuator/health"
+            "/actuator/**"
     };
 
     /**
@@ -67,7 +67,8 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers(AUTH_WHITELIST).permitAll();
-                    auth.anyRequest().authenticated();
+//                    auth.anyRequest().authenticated();
+                    auth.anyRequest().permitAll();
                 })
 
                 .oauth2ResourceServer(oauth2 -> oauth2
